@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta v2 – Plataforma Inmobiliaria Digital</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-dark:  #1A3C5E;
+    --blue-mid:   #2563A8;
+    --blue-light: #3B82C4;
+    --blue-pale:  #EBF4FF;
+    --accent:     #F59E0B;
+    --green:      #059669;
+    --green-pale: #ECFDF5;
+    --red:        #DC2626;
+    --red-pale:   #FEF2F2;
+    --gray-900:   #111827;
+    --gray-700:   #374151;
+    --gray-500:   #6B7280;
+    --gray-200:   #E5E7EB;
+    --gray-100:   #F3F4F6;
+    --white:      #FFFFFF;
+  }
+
+  body { font-family: 'Inter', sans-serif; font-size: 10.5pt; color: var(--gray-700); background: #fff; line-height: 1.6; }
+
+  .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 0; page-break-after: always; position: relative; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+
+  @media screen {
+    body { background: #d1d5db; padding: 20px 0; }
+    .page { box-shadow: 0 4px 24px rgba(0,0,0,.18); margin: 0 auto 28px; background: #fff; }
+  }
+  @media print { body { background: white; padding: 0; } .page { box-shadow: none; margin: 0; } }
+
+  /* COVER */
+  .cover { background: linear-gradient(155deg, var(--blue-dark) 0%, var(--blue-mid) 60%, var(--blue-light) 100%); display: flex; flex-direction: column; justify-content: space-between; min-height: 297mm; }
+  .cover-top { padding: 50px 55px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover-badge { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); color: rgba(255,255,255,.9); font-size: 8pt; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; }
+  .cover-version { background: var(--accent); color: #fff; font-size: 8pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; }
+  .cover-main { padding: 60px 55px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .cover-label { color: var(--accent); font-size: 8.5pt; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 18px; }
+  .cover-title { color: #fff; font-size: 34pt; font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
+  .cover-subtitle { color: rgba(255,255,255,.75); font-size: 14pt; font-weight: 400; margin-bottom: 50px; line-height: 1.4; }
+  .cover-divider { width: 60px; height: 4px; background: var(--accent); border-radius: 2px; margin-bottom: 40px; }
+  .cover-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 400px; }
+  .cover-info-item label { display: block; color: rgba(255,255,255,.5); font-size: 7.5pt; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .cover-info-item span { color: #fff; font-size: 10pt; font-weight: 500; }
+  .cover-bottom { background: rgba(0,0,0,.25); padding: 22px 55px; display: flex; justify-content: space-between; align-items: center; }
+  .cover-bottom p { color: rgba(255,255,255,.55); font-size: 8pt; }
+  .cover-icon { width: 48px; height: 48px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+
+  /* CONTENT */
+  .content-page { padding: 52px 55px 48px; display: flex; flex-direction: column; min-height: 297mm; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 2px solid var(--blue-dark); margin-bottom: 32px; }
+  .page-header-title { font-size: 8pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--blue-mid); }
+  .page-header-number { font-size: 8pt; color: var(--gray-500); }
+  .section-title { font-size: 18pt; font-weight: 800; color: var(--blue-dark); margin-bottom: 6px; line-height: 1.2; }
+  .section-line { width: 44px; height: 3px; background: var(--accent); border-radius: 2px; margin-bottom: 22px; }
+  .subsection-title { font-size: 11pt; font-weight: 700; color: var(--blue-dark); margin: 22px 0 8px; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--blue-pale); border: 1px solid #BFDBFE; border-radius: 10px; padding: 16px 18px; }
+  .card-icon { font-size: 20px; margin-bottom: 8px; }
+  .card-title { font-size: 10pt; font-weight: 700; color: var(--blue-dark); margin-bottom: 4px; }
+  .card-text { font-size: 9pt; color: var(--gray-700); line-height: 1.5; }
+
+  /* LISTS */
+  .feature-list { list-style: none; padding: 0; margin-bottom: 16px; }
+  .feature-list li { padding: 6px 0 6px 24px; position: relative; font-size: 9.5pt; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list li::before { content: "✓"; position: absolute; left: 0; color: var(--blue-mid); font-weight: 700; font-size: 11pt; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 9.5pt; }
+  thead tr { background: var(--blue-dark); }
+  thead th { color: #fff; font-weight: 600; padding: 10px 14px; text-align: left; font-size: 9pt; }
+  tbody tr:nth-child(even) { background: var(--gray-100); }
+  tbody td { padding: 9px 14px; color: var(--gray-700); vertical-align: top; }
+
+  /* BOXES */
+  .highlight-box { background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid)); border-radius: 12px; padding: 20px 24px; color: #fff; margin-bottom: 18px; }
+  .highlight-box .label { font-size: 7.5pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .info-box { background: var(--blue-pale); border-left: 4px solid var(--blue-mid); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; font-size: 9.5pt; }
+  .info-box strong { color: var(--blue-dark); }
+  .warning-box { background: #FFFBEB; border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; font-size: 9.5pt; }
+  .warning-box strong { color: #92400E; }
+  .green-box { background: var(--green-pale); border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; font-size: 9.5pt; }
+  .green-box strong { color: var(--green); }
+  .red-box { background: var(--red-pale); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; font-size: 9.5pt; }
+  .red-box strong { color: var(--red); }
+
+  /* TIMELINE */
+  .timeline { margin-bottom: 20px; }
+  .timeline-item { display: flex; gap: 16px; padding: 0 0 20px; position: relative; }
+  .timeline-item:not(:last-child)::before { content: ""; position: absolute; left: 19px; top: 38px; width: 2px; height: calc(100% - 18px); background: var(--gray-200); }
+  .timeline-dot { width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: var(--blue-dark); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11pt; position: relative; z-index: 1; }
+  .timeline-content { flex: 1; padding-top: 6px; }
+  .timeline-title { font-weight: 700; color: var(--blue-dark); font-size: 10.5pt; }
+  .timeline-duration { font-size: 8.5pt; color: var(--blue-mid); font-weight: 600; }
+  .timeline-desc { font-size: 9pt; color: var(--gray-500); margin-top: 2px; }
+  .timeline-milestone { display: inline-block; background: var(--accent); color: #fff; font-size: 7.5pt; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-top: 4px; letter-spacing: .05em; }
+
+  /* PRICING */
+  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .pricing-card { border: 2px solid var(--gray-200); border-radius: 12px; overflow: hidden; position: relative; }
+  .pricing-card.featured { border-color: var(--blue-mid); box-shadow: 0 4px 20px rgba(37,99,168,.18); }
+  .pricing-card.featured .pricing-header { background: var(--blue-dark); }
+  .pricing-badge { position: absolute; top: -1px; right: 16px; background: var(--accent); color: #fff; font-size: 7.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 0 0 6px 6px; }
+  .pricing-header { background: var(--blue-mid); padding: 18px 20px 14px; color: #fff; }
+  .pricing-header h3 { font-size: 11pt; font-weight: 700; margin-bottom: 4px; }
+  .pricing-header .price { font-size: 22pt; font-weight: 800; line-height: 1; }
+  .pricing-header .price span { font-size: 11pt; font-weight: 400; opacity: .8; }
+  .pricing-body { padding: 16px 20px; }
+  .pricing-body ul { list-style: none; }
+  .pricing-body li { padding: 5px 0; font-size: 9pt; border-bottom: 1px solid var(--gray-100); padding-left: 18px; position: relative; color: var(--gray-700); }
+  .pricing-body li::before { content: "✓"; position: absolute; left: 0; color: var(--blue-mid); font-weight: 700; }
+  .pricing-body li.x::before { content: "✗"; color: #D1D5DB; }
+  .pricing-body li.x { color: var(--gray-500); }
+
+  /* TECH */
+  .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .tech-item { background: var(--gray-100); border-radius: 8px; padding: 12px 10px; text-align: center; font-size: 9pt; font-weight: 600; color: var(--blue-dark); }
+  .tech-item .tech-icon { font-size: 18px; margin-bottom: 5px; }
+  .tech-item .tech-role { font-size: 7.5pt; color: var(--gray-500); font-weight: 400; margin-top: 2px; }
+
+  /* DEFINITION TABLE */
+  .def-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 9pt; }
+  .def-table td { padding: 10px 14px; border: 1px solid var(--gray-200); vertical-align: top; }
+  .def-table td:first-child { width: 30%; font-weight: 700; background: var(--gray-100); }
+  .def-table tr:nth-child(1) td:first-child { background: #D1FAE5; color: var(--green); }
+  .def-table tr:nth-child(2) td:first-child { background: #FEF3C7; color: #92400E; }
+
+  /* PAYMENT MILESTONE */
+  .payment-steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .payment-step { border-radius: 10px; overflow: hidden; border: 1px solid var(--gray-200); }
+  .payment-step-header { padding: 12px 16px; font-weight: 700; font-size: 10pt; color: #fff; }
+  .payment-step-body { padding: 12px 16px; font-size: 9pt; color: var(--gray-700); }
+  .payment-step-body .amount { font-size: 15pt; font-weight: 800; color: var(--blue-dark); margin-bottom: 4px; }
+  .payment-step-body .pct { font-size: 8.5pt; color: var(--gray-500); }
+
+  /* FOOTER */
+  .page-footer { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--gray-200); display: flex; justify-content: space-between; font-size: 8pt; color: var(--gray-500); }
+  .page-footer strong { color: var(--blue-mid); }
+
+  p { margin-bottom: 10px; font-size: 9.5pt; line-height: 1.65; }
+
+  /* CREDENTIAL STARS */
+  .cred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .cred-card { background: var(--gray-100); border-radius: 10px; padding: 16px 18px; border-left: 4px solid var(--blue-mid); }
+  .cred-card .cred-num { font-size: 22pt; font-weight: 800; color: var(--blue-dark); line-height: 1; }
+  .cred-card .cred-label { font-size: 8.5pt; color: var(--gray-500); margin-top: 2px; }
+  .cred-card .cred-desc { font-size: 9pt; color: var(--gray-700); margin-top: 6px; }
+
+  /* ═══════════════════════════════════
+     MOBILE RESPONSIVE
+  ════════════════════════════════════ */
+  @media (max-width: 768px) {
+    body { font-size: 13px; }
+
+    .page {
+      width: 100% !important;
+      min-height: auto !important;
+      margin: 0 0 12px 0 !important;
+      border-radius: 0;
+    }
+
+    .cover { min-height: 100svh; }
+    .cover-top { padding: 24px 18px 0; flex-wrap: wrap; gap: 8px; }
+    .cover-main { padding: 28px 18px; }
+    .cover-title { font-size: 24pt; }
+    .cover-subtitle { font-size: 11pt; margin-bottom: 24px; }
+    .cover-divider { margin-bottom: 24px; }
+    .cover-info-grid { grid-template-columns: 1fr 1fr; gap: 12px; max-width: 100%; }
+    .cover-bottom { padding: 16px 18px; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+    .content-page { padding: 24px 16px 20px; min-height: auto !important; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 3px; margin-bottom: 20px; }
+    .section-title { font-size: 15pt; }
+    .subsection-title { font-size: 10pt; margin: 16px 0 6px; }
+
+    .card-grid,
+    .card-grid-3,
+    .pricing-grid,
+    .payment-steps,
+    .cred-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+
+    .tech-grid { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+
+    div[style*="grid-template-columns:1fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr"] {
+      display: block !important;
+    }
+
+    table, .def-table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      font-size: 8.5pt;
+    }
+    thead th, tbody td { white-space: nowrap; padding: 8px 10px; }
+
+    .timeline-dot { width: 30px; height: 30px; min-width: 30px; font-size: 9pt; }
+    .timeline-item { gap: 10px; }
+    .timeline-title { font-size: 9.5pt; }
+    .timeline-desc { font-size: 8.5pt; }
+    .timeline-milestone { font-size: 7pt; }
+
+    .info-box, .warning-box, .green-box, .red-box { padding: 11px 13px; font-size: 9pt; }
+    .highlight-box { padding: 16px 18px; }
+    .highlight-box div[style*="text-align:right"] { text-align: left !important; margin-top: 14px; }
+
+    .card { padding: 14px; }
+    .card-text { font-size: 8.5pt; }
+    .pricing-header .price { font-size: 18pt; }
+    .payment-step-body .amount { font-size: 13pt; }
+    .feature-list li { font-size: 9pt; }
+    .cred-card .cred-num { font-size: 18pt; }
+    .page-footer { flex-direction: column; gap: 4px; font-size: 7.5pt; }
+    p { font-size: 9pt; }
+  }
+
+  @media (max-width: 400px) {
+    .cover-info-grid { grid-template-columns: 1fr; }
+    .cover-title { font-size: 20pt; }
+    .cover-badge, .cover-version { font-size: 7pt; padding: 5px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════  PÁGINA 1 — PORTADA  ══════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-top">
+      <div class="cover-badge">Propuesta Comercial Confidencial</div>
+      <div class="cover-version">Versión 2.0 · Revisada</div>
+    </div>
+    <div class="cover-main">
+      <div class="cover-label">Desarrollo de Software &nbsp;·&nbsp; Plataforma Inmobiliaria</div>
+      <div class="cover-title">Plataforma<br>Inmobiliaria<br>Digital</div>
+      <div class="cover-subtitle">Web App · Mobile (Android &amp; iOS) · Mapa Interactivo</div>
+      <div class="cover-divider"></div>
+      <div class="cover-info-grid">
+        <div class="cover-info-item"><label>Preparado para</label><span>Carla Acosta</span></div>
+        <div class="cover-info-item"><label>País</label><span>República Dominicana</span></div>
+        <div class="cover-info-item"><label>Preparado por</label><span>Diógenes Martínez</span></div>
+        <div class="cover-info-item"><label>Válido hasta</label><span>30 días desde emisión</span></div>
+        <div class="cover-info-item"><label>Versión</label><span>2.0 — Con términos revisados</span></div>
+        <div class="cover-info-item"><label>Fecha</label><span>Junio 2026</span></div>
+      </div>
+    </div>
+    <div class="cover-bottom">
+      <div>
+        <p style="color:rgba(255,255,255,.8);font-size:9pt;font-weight:600;">diogenesdmartinez@gmail.com</p>
+        <p>Este documento es confidencial y está dirigido exclusivamente al destinatario indicado.</p>
+      </div>
+      <div class="cover-icon">🏠</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════  PÁGINA 2 — SOBRE EL DESARROLLADOR  ══════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-header-title">Plataforma Inmobiliaria Digital</div>
+      <div class="page-header-number">Sobre el Desarrollador</div>
+    </div>
+    <div class="section-title">¿Por qué confiar en este equipo?</div>
+    <div class="section-line"></div>
+    <p>Antes de hablar de precios y plazos, es justo que sepas con quién estás trabajando. Esta sección responde la pregunta más importante que cualquier cliente debería hacerse: <strong>¿tiene experiencia demostrable en proyectos de esta complejidad?</strong></p>
+    <div class="cred-grid">
+      <div class="cred-card">
+        <div class="cred-num">5+</div>
+        <div class="cred-label">Años de experiencia en desarrollo web</div>
+        <div class="cred-desc">Proyectos entregados en sectores de e-commerce, bienes raíces, salud y servicios profesionales.</div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-num">20+</div>
+        <div class="cred-label">Proyectos completados</div>
+        <div class="cred-desc">Desde landing pages hasta plataformas con múltiples módulos, integraciones de pago y paneles administrativos.</div>
+      </div>
+      <div class="cred-card" style="border-color:var(--accent);">
+        <div class="cred-num" style="color:var(--accent);">✓</div>
+        <div class="cred-label">Experiencia con mapas interactivos</div>
+        <div class="cred-desc">Implementaciones previas con Mapbox y Leaflet.js incluyendo geolocalización, pines dinámicos y filtros en tiempo real.</div>
+      </div>
+      <div class="cred-card" style="border-color:var(--green);">
+        <div class="cred-num" style="color:var(--green);">✓</div>
+        <div class="cred-label">Stack moderno y vigente</div>
+        <div class="cred-desc">React, Node.js, PostgreSQL y Docker son las tecnologías estándar de la industria para proyectos de esta escala.</div>
+      </div>
+    </div>
+    <div class="subsection-title">Tecnologías similares ya utilizadas en proyectos previos</div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-icon">⚛️</div>React.js<div class="tech-role">Frontend</div></div>
+      <div class="tech-item"><div class="tech-icon">🟢</div>Node.js<div class="tech-role">Backend</div></div>
+      <div class="tech-item"><div class="tech-icon">🗄️</div>PostgreSQL<div class="tech-role">Base de datos</div></div>
+      <div class="tech-item"><div class="tech-icon">🗺️</div>Mapbox<div class="tech-role">Mapas</div></div>
+      <div class="tech-item"><div class="tech-icon">🔐</div>JWT/OAuth<div class="tech-role">Autenticación</div></div>
+      <div class="tech-item"><div class="tech-icon">📱</div>PWA<div class="tech-role">Mobile</div></div>
+      <div class="tech-item"><div class="tech-icon">☁️</div>DigitalOcean<div class="tech-role">Cloud</div></div>
+      <div class="tech-item"><div class="tech-icon">🐳</div>Docker<div class="tech-role">Deploy</div></div>
+    </div>
+    <div class="info-box">
+      <strong>Para el cliente:</strong> Durante la reunión de Kickoff se compartirá acceso a demos o repositorios de proyectos previos bajo NDA si el cliente lo requiere, permitiendo verificar la calidad del trabajo antes de firmar el contrato.
+    </div>
+    <div class="subsection-title">Metodología de trabajo</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">📅</div><div class="card-title">Actualizaciones semanales</div><div class="card-text">Cada viernes recibes un reporte de progreso con lo completado, lo que viene la próxima semana y cualquier decisión pendiente.</div></div>
+      <div class="card"><div class="card-icon">🎥</div><div class="card-title">Demos en vivo</div><div class="card-text">En puntos clave del proyecto hacemos videollamada donde ves el avance funcionando en pantalla antes de cada pago.</div></div>
+      <div class="card"><div class="card-icon">💬</div><div class="card-title">Canal directo</div><div class="card-text">WhatsApp o Slack para comunicación ágil. Tiempo de respuesta máximo: 4 horas en horario laboral.</div></div>
+      <div class="card"><div class="card-icon">📂</div><div class="card-title">Repositorio compartido</div><div class="card-text">Desde el día 1 el cliente tiene acceso de lectura al repositorio de código (GitHub privado), con total visibilidad del avance.</div></div>
+    </div>
+    <div class="page-footer">
+      <span><strong>Plataforma Inmobiliaria Digital v2.0</strong> — Propuesta Comercial</span>
+      <span>Página 2 de 7 &nbsp;·&nbsp; Junio 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════  PÁGINA 3 — FUNCIONALIDADES  ══════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-header-title">Plataforma Inmobiliaria Digital v2.0</div>
+      <div class="page-header-number">Funcionalidades</div>
+    </div>
+    <div class="section-title">Funcionalidades del Sistema</div>
+    <div class="section-line"></div>
+    <div class="green-box">
+      <strong>Diseño UI/UX incluido en el precio:</strong> Esta propuesta incluye el diseño visual completo de la interfaz (colores, tipografía, iconografía, componentes) y el prototipo navegable para validación del cliente antes de desarrollar. No hay costo adicional por diseño.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div>
+        <div class="subsection-title" style="margin-top:0;">🏠 Portal Público (Compradores)</div>
+        <ul class="feature-list">
+          <li>Búsqueda con filtros avanzados (precio, tipo, zona)</li>
+          <li>Vista de mapa con pines en tiempo real</li>
+          <li>Geolocalización: propiedades cerca de mí</li>
+          <li>Galería de fotos por propiedad</li>
+          <li>Ficha completa: m², habitaciones, baños, precio</li>
+          <li>Calculadora de hipoteca integrada</li>
+          <li>Favoritos y listas guardadas</li>
+          <li>Compartir por WhatsApp / redes sociales</li>
+          <li>Formulario de contacto con el agente</li>
+        </ul>
+        <div class="subsection-title">👤 Módulo de Usuarios</div>
+        <ul class="feature-list">
+          <li>Registro e inicio de sesión</li>
+          <li>Perfil de comprador y vendedor</li>
+          <li>Historial de propiedades vistas</li>
+          <li>Alertas por email de nuevas propiedades</li>
+          <li>Panel personal del agente</li>
+        </ul>
+      </div>
+      <div>
+        <div class="subsection-title" style="margin-top:0;">🏢 Panel de Agentes</div>
+        <ul class="feature-list">
+          <li>Publicar propiedades con fotos</li>
+          <li>Editar y desactivar listados</li>
+          <li>Ver estadísticas de visitas</li>
+          <li>Gestión de leads (interesados)</li>
+          <li>Perfil público del agente</li>
+        </ul>
+        <div class="subsection-title">⚙️ Panel de Administración</div>
+        <ul class="feature-list">
+          <li>Dashboard con KPIs: visitas, propiedades, usuarios</li>
+          <li>CRUD completo de propiedades</li>
+          <li>Gestión de usuarios y agentes</li>
+          <li>Moderación de contenido</li>
+          <li>Exportar datos a Excel / CSV</li>
+        </ul>
+        <div class="subsection-title">📱 Mobile (PWA)</div>
+        <ul class="feature-list">
+          <li>Instalable en Android e iOS sin App Store</li>
+          <li>Acceso a GPS del dispositivo</li>
+          <li>Funciona parcialmente sin conexión</li>
+          <li>Notificaciones push</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box">
+      <strong>Alcance acotado (Fase 1):</strong> Esta versión no incluye valuación automática de propiedades, integración con MLS o app nativa en tiendas. Estas funcionalidades pueden desarrollarse en una Fase 2 con cotización aparte.
+    </div>
+    <div class="page-footer">
+      <span><strong>Plataforma Inmobiliaria Digital v2.0</strong> — Propuesta Comercial</span>
+      <span>Página 3 de 7 &nbsp;·&nbsp; Junio 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════  PÁGINA 4 — CRONOGRAMA  ══════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-header-title">Plataforma Inmobiliaria Digital v2.0</div>
+      <div class="page-header-number">Cronograma</div>
+    </div>
+    <div class="section-title">Cronograma de Entrega</div>
+    <div class="section-line"></div>
+    <p>Cada fase tiene un entregable concreto y verificable. Los pagos están <strong>atados a hitos de entrega</strong>, no al calendario, para proteger al cliente.</p>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-dot">1</div><div class="timeline-content"><div class="timeline-title">Discovery &amp; Diseño UX/UI <span class="timeline-duration">— Semanas 1–2</span></div><div class="timeline-desc">Levantamiento de requerimientos, casos de uso documentados, wireframes de todas las pantallas, prototipo navegable en Figma para validación del cliente.</div><div class="timeline-milestone">✓ Entregable: Prototipo aprobado por el cliente → libera inicio del desarrollo</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot">2</div><div class="timeline-content"><div class="timeline-title">Arquitectura &amp; Base de Datos <span class="timeline-duration">— Semana 3</span></div><div class="timeline-desc">Modelo entidad-relación documentado, arquitectura del servidor definida, entornos configurados (dev, staging, producción). El cliente recibe acceso al repositorio privado.</div><div class="timeline-milestone">✓ Entregable: Diagrama de BD + entorno de desarrollo funcionando</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot">3</div><div class="timeline-content"><div class="timeline-title">Backend &amp; API REST <span class="timeline-duration">— Semanas 3–6</span></div><div class="timeline-desc">Autenticación, CRUD de propiedades, búsqueda con filtros, geolocalización, gestión de usuarios y agentes. API documentada con Swagger.</div><div class="timeline-milestone">✓ Entregable: API funcional + documentación → libera 2.º pago</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent);">💰</div><div class="timeline-content"><div class="timeline-title" style="color:var(--accent);">DEMO #1 — Control de calidad del cliente <span class="timeline-duration">— Semana 5 o 6</span></div><div class="timeline-desc">Videollamada donde el cliente ve el backend en funcionamiento, prueba los endpoints y valida que el sistema hace lo prometido. Solo si el cliente aprueba, se procede al siguiente pago.</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot">4</div><div class="timeline-content"><div class="timeline-title">Frontend + Mapa Interactivo <span class="timeline-duration">— Semanas 5–8</span></div><div class="timeline-desc">Interfaz completa: portal público, búsqueda, vista de mapa con pines dinámicos, fichas de propiedades, calculadora de hipoteca, módulo de agentes.</div><div class="timeline-milestone">✓ Entregable: Interfaz completa en entorno staging</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot">5</div><div class="timeline-content"><div class="timeline-title">Admin + PWA + QA <span class="timeline-duration">— Semanas 8–10</span></div><div class="timeline-desc">Panel de administración, optimización mobile/PWA, pruebas funcionales en Android e iOS, corrección de bugs, documentación técnica y manual de usuario.</div><div class="timeline-milestone">✓ Entregable: Plataforma completa en staging lista para revisión final</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent);">💰</div><div class="timeline-content"><div class="timeline-title" style="color:var(--accent);">DEMO #2 — Revisión final y aprobación <span class="timeline-duration">— Semana 10</span></div><div class="timeline-desc">El cliente prueba la plataforma completa en staging. Reporta observaciones finales. Solo tras aprobación del cliente se hace el deploy en producción y se libera el pago final.</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--green);">✓</div><div class="timeline-content"><div class="timeline-title" style="color:var(--green);">Lanzamiento &amp; Entrega <span class="timeline-duration">— Semana 10</span></div><div class="timeline-desc">Deploy en producción, capacitación al equipo del cliente (hasta 3 horas), entrega de credenciales, documentación y código fuente completo.</div><div class="timeline-milestone" style="background:var(--green);">✓ Entregable: Plataforma en producción → libera pago final</div></div></div>
+    </div>
+    <div class="page-footer">
+      <span><strong>Plataforma Inmobiliaria Digital v2.0</strong> — Propuesta Comercial</span>
+      <span>Página 4 de 7 &nbsp;·&nbsp; Junio 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════  PÁGINA 5 — INVERSIÓN  ══════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-header-title">Plataforma Inmobiliaria Digital v2.0</div>
+      <div class="page-header-number">Inversión</div>
+    </div>
+    <div class="section-title">Inversión del Proyecto</div>
+    <div class="section-line"></div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-header" style="background:var(--gray-700);"><h3>MVP Básico</h3><div class="price">$8,000 <span>USD</span></div><div style="font-size:8pt;opacity:.7;margin-top:4px;">Entrega en 6–7 semanas</div></div>
+        <div class="pricing-body"><ul><li>Portal de propiedades</li><li>Búsqueda con filtros</li><li>Mapa interactivo</li><li>Panel de agentes</li><li>Admin básico</li><li>Diseño UI/UX incluido</li><li class="x">PWA instalable</li><li class="x">Notificaciones push</li><li class="x">App nativa</li></ul></div>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Recomendado</div>
+        <div class="pricing-header"><h3>Plataforma Completa</h3><div class="price">$15,000 <span>USD</span></div><div style="font-size:8pt;opacity:.7;margin-top:4px;">Entrega en 10 semanas</div></div>
+        <div class="pricing-body"><ul><li>Todo lo del plan MVP</li><li>Diseño UI/UX completo incluido</li><li>PWA Android + iOS</li><li>Geolocalización GPS</li><li>Notificaciones push</li><li>Calculadora hipoteca</li><li>Dashboard analytics</li><li>Exportar datos</li><li class="x">App nativa en tiendas</li></ul></div>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-header" style="background:#7C3AED;"><h3>Enterprise</h3><div class="price">$25,000 <span>USD</span></div><div style="font-size:8pt;opacity:.7;margin-top:4px;">Entrega en 16 semanas</div></div>
+        <div class="pricing-body"><ul><li>Todo lo del plan Completo</li><li>App nativa Android + iOS</li><li>Publicación en tiendas</li><li>Integración pagos online</li><li>Multi-idioma</li><li>6 meses de soporte incluido</li><li>SEO técnico avanzado</li><li>SLA garantizado</li></ul></div>
+      </div>
+    </div>
+    <div class="subsection-title">Esquema de Pagos — Atados a Entregables (Plan $15,000)</div>
+    <div class="payment-steps">
+      <div class="payment-step"><div class="payment-step-header" style="background:var(--blue-dark);">Pago 1 — Al firmar</div><div class="payment-step-body"><div class="amount">$6,000</div><div class="pct">40% del total</div><div style="margin-top:8px;font-size:8.5pt;color:var(--gray-500);">Cubre Discovery, diseño UX/UI y configuración de entornos. Inicia el proyecto.</div></div></div>
+      <div class="payment-step"><div class="payment-step-header" style="background:var(--blue-mid);">Pago 2 — Tras Demo #1</div><div class="payment-step-body"><div class="amount">$4,500</div><div class="pct">30% del total</div><div style="margin-top:8px;font-size:8.5pt;color:var(--gray-500);">Solo se libera después de que el cliente aprueba el backend funcional en la Demo de la semana 5–6.</div></div></div>
+      <div class="payment-step"><div class="payment-step-header" style="background:var(--green);">Pago 3 — Tras Demo #2</div><div class="payment-step-body"><div class="amount">$4,500</div><div class="pct">30% del total</div><div style="margin-top:8px;font-size:8.5pt;color:var(--gray-500);">Solo se libera tras aprobación final del cliente en staging. Antes del deploy en producción.</div></div></div>
+    </div>
+    <div class="subsection-title">Costos Operativos Mensuales + Escalabilidad</div>
+    <table>
+      <thead><tr><th>Servicio</th><th>Hasta 1,000 usuarios/mes</th><th>Hasta 10,000 usuarios/mes</th><th>+10,000 usuarios/mes</th></tr></thead>
+      <tbody>
+        <tr><td>Servidor (VPS)</td><td>$24</td><td>$48–80</td><td>$100–200+</td></tr>
+        <tr><td>Base de Datos</td><td>$15</td><td>$30–50</td><td>$50–120</td></tr>
+        <tr><td>Mapbox API</td><td>$0 (gratis)</td><td>$0–50</td><td>$50–200</td></tr>
+        <tr><td>Email (alertas)</td><td>$0</td><td>$15</td><td>$30–80</td></tr>
+        <tr><td>Dominio + SSL</td><td>~$1</td><td>~$1</td><td>~$1</td></tr>
+        <tr style="background:var(--blue-pale);font-weight:700;"><td><strong>Total estimado</strong></td><td><strong>~$40/mes</strong></td><td><strong>~$100–180/mes</strong></td><td><strong>$230–600/mes</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="info-box">
+      <strong>Mantenimiento mensual opcional:</strong> $200–300 USD/mes cubre hosting hasta 5,000 usuarios, monitoreo 24/7, actualizaciones de seguridad y hasta 4 horas de soporte. Si el tráfico supera los umbrales indicados, se notifica al cliente con 15 días de anticipación antes de ajustar el costo del servidor.
+    </div>
+    <div class="page-footer">
+      <span><strong>Plataforma Inmobiliaria Digital v2.0</strong> — Propuesta Comercial</span>
+      <span>Página 5 de 7 &nbsp;·&nbsp; Junio 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════  PÁGINA 6 — TÉRMINOS  ══════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-header-title">Plataforma Inmobiliaria Digital v2.0</div>
+      <div class="page-header-number">Términos &amp; Garantías</div>
+    </div>
+    <div class="section-title">Términos &amp; Garantías Detalladas</div>
+    <div class="section-line"></div>
+    <div class="subsection-title" style="margin-top:0;">🔍 ¿Qué es un Bug y qué es un Cambio de Alcance?</div>
+    <p style="font-size:9pt;">Esta distinción protege a ambas partes y evita malentendidos frecuentes en proyectos de software.</p>
+    <table class="def-table">
+      <tr><td>✅ BUG (sin costo adicional)</td><td>Cualquier función descrita en el documento de requerimientos aprobado que no funciona como se especificó. Ejemplo: el filtro de precio no filtra correctamente, el mapa no carga las propiedades, el login falla. Los bugs se corrigen sin costo durante la garantía de 60 días.</td></tr>
+      <tr><td>⚠️ CAMBIO DE ALCANCE (se cotiza aparte)</td><td>Cualquier función nueva, modificación de diseño ya aprobado, o comportamiento diferente al especificado originalmente. Ejemplo: "quiero añadir un chat entre agentes y compradores", "cambia el color de todos los botones". Tarifa: $45 USD/hora, con cotización previa y aprobación escrita del cliente.</td></tr>
+    </table>
+    <div class="subsection-title">📂 Propiedad del Código durante el Proyecto</div>
+    <table>
+      <thead><tr><th>Momento</th><th>Propiedad</th><th>Acceso del cliente</th></tr></thead>
+      <tbody>
+        <tr><td>Desde el día 1</td><td>Desarrollador (custodia)</td><td>Lectura al repositorio GitHub privado</td></tr>
+        <tr><td>Tras el Pago 1 (40%)</td><td>Compartida</td><td>Acceso completo al código de Discovery y diseño</td></tr>
+        <tr><td>Tras el Pago 2 (30%)</td><td>Compartida</td><td>Acceso al backend completo entregado</td></tr>
+        <tr><td>Tras el Pago 3 final</td><td><strong>100% Cliente</strong></td><td>Transferencia total del repositorio y credenciales</td></tr>
+      </tbody>
+    </table>
+    <div class="red-box">
+      <strong>En caso de cancelación del proyecto:</strong> El cliente retiene la propiedad del código y entregables completados hasta el último pago realizado. No se devuelven pagos por trabajo ya realizado y aprobado. Si el desarrollador cancela el proyecto sin causa justificada, devuelve el último pago recibido más un 20% de penalización.
+    </div>
+    <div class="subsection-title">🛡️ Garantía Post-Entrega (60 días)</div>
+    <div class="card-grid">
+      <div class="card" style="background:var(--green-pale);border-color:#6EE7B7;"><div class="card-icon">✅</div><div class="card-title" style="color:var(--green);">Cubierto por garantía</div><div class="card-text">Bugs funcionales en features especificadas. Caídas del servidor por configuración incorrecta. Problemas de compatibilidad con navegadores modernos (Chrome, Firefox, Safari, Edge). Errores en el deploy inicial.</div></div>
+      <div class="card" style="background:var(--red-pale);border-color:#FCA5A5;"><div class="card-icon">❌</div><div class="card-title" style="color:var(--red);">No cubierto por garantía</div><div class="card-text">Cambios de diseño o funcionales. Problemas causados por modificaciones del cliente al código. Fallas por servicios de terceros (Mapbox, SendGrid). Actualizaciones de contenido (propiedades, textos, fotos).</div></div>
+    </div>
+    <div class="green-box">
+      <strong>Período de garantía extendido:</strong> La garantía estándar es de <strong>60 días</strong> (no 30 como es común en el mercado). Durante este período, los bugs se atienden en un máximo de 48 horas hábiles y se corrigen sin costo adicional.
+    </div>
+    <div class="page-footer">
+      <span><strong>Plataforma Inmobiliaria Digital v2.0</strong> — Propuesta Comercial</span>
+      <span>Página 6 de 7 &nbsp;·&nbsp; Junio 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════  PÁGINA 7 — PRÓXIMOS PASOS  ══════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-header-title">Plataforma Inmobiliaria Digital v2.0</div>
+      <div class="page-header-number">Próximos Pasos</div>
+    </div>
+    <div class="section-title">Próximos Pasos</div>
+    <div class="section-line"></div>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--blue-mid);">1</div><div class="timeline-content"><div class="timeline-title">Revisión de la propuesta</div><div class="timeline-desc">El cliente lee la propuesta con detenimiento, anota preguntas o ajustes y los comunica por escrito. Tiempo sugerido: 2–3 días hábiles.</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--blue-mid);">2</div><div class="timeline-content"><div class="timeline-title">Reunión de aclaración (sin compromiso)</div><div class="timeline-desc">Videollamada de 45 min para resolver todas las dudas, ajustar el alcance si es necesario y alinear expectativas antes de firmar.</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--blue-mid);">3</div><div class="timeline-content"><div class="timeline-title">Firma del contrato de servicios</div><div class="timeline-desc">Contrato firmado digitalmente (DocuSign o similar) que formaliza el alcance, el cronograma, los pagos y los términos acordados en esta propuesta.</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent);">💰</div><div class="timeline-content"><div class="timeline-title" style="color:var(--accent);">Pago inicial — $6,000 (40%)</div><div class="timeline-desc">Transferencia bancaria o Binance. El proyecto inicia formalmente 24 horas después de confirmado el pago.</div></div></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background:var(--green);">✓</div><div class="timeline-content"><div class="timeline-title" style="color:var(--green);">Reunión de Kickoff — ¡Comenzamos!</div><div class="timeline-desc">Sesión de trabajo de 2 horas donde se define el calendario exacto, se comparten accesos, se configura el canal de comunicación y se inicia el Discovery.</div></div></div>
+    </div>
+    <div class="subsection-title">Condiciones Generales Adicionales</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+      <ul class="feature-list">
+        <li>Propuesta válida por <strong>30 días</strong> desde emisión</li>
+        <li>El cliente provee dominio y accesos necesarios</li>
+        <li>Hasta <strong>2 rondas de feedback</strong> por fase incluidas</li>
+        <li>Cambios fuera del alcance: $45/hora, cotización previa</li>
+        <li>Comunicación en español, entregables en español</li>
+      </ul>
+      <ul class="feature-list">
+        <li>Actualizaciones semanales de progreso garantizadas</li>
+        <li>Acceso al repositorio desde el día 1</li>
+        <li>2 demos en vivo antes de cada pago (semanas 5–6 y 10)</li>
+        <li>Capacitación incluida: hasta 3 horas post-entrega</li>
+        <li>Documentación técnica y manual de usuario incluidos</li>
+      </ul>
+    </div>
+    <div class="highlight-box">
+      <div class="label">Contacto directo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;">
+        <div>
+          <div style="font-size:14pt;font-weight:800;color:#fff;margin-bottom:8px;">Diógenes Martínez</div>
+          <div style="font-size:9.5pt;color:rgba(255,255,255,.8);line-height:2;">
+            📧 diogenesdmartinez@gmail.com<br>
+            📱 [Tu número de WhatsApp]
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="background:var(--accent);display:inline-block;padding:12px 24px;border-radius:8px;font-weight:700;font-size:10pt;color:#fff;">
+            ¿Listo para empezar?<br>
+            <span style="font-size:8.5pt;font-weight:400;">Escríbenos hoy mismo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-bottom:0;">
+      <strong>Nota final:</strong> Esta propuesta está diseñada para ser transparente y proteger a ambas partes. Todos los términos son negociables dentro de un marco razonable. Si algo no está claro o quieres ajustar el alcance, el momento de decirlo es antes de firmar, no durante el proyecto.
+    </div>
+    <div class="page-footer">
+      <span><strong>Plataforma Inmobiliaria Digital v2.0</strong> — Propuesta Comercial</span>
+      <span>Página 7 de 7 &nbsp;·&nbsp; Junio 2026</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
